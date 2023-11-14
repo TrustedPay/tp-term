@@ -1,0 +1,12 @@
+syntax = "proto3";
+option go_package = "github.com/TrustedPay/tp-term/pkg/processor";
+import "common.proto";
+
+message AuthorizeTransactionReply {
+  string payment_id = 1;
+  TransactionStatus status = 2;
+}
+
+service TPProcessor {
+  rpc AuthorizeTransaction(Transaction) returns (AuthorizeTransactionReply) {}
+}
