@@ -2,13 +2,9 @@
 
 ## Overview
 
-### Terminal State Machine
+### TrustedPay Protocol
 
-![Terminal State Machine](docs/TrustedPay%20State%20Machine-1.png)
-
-### Server State Machine
-
-![Server State Machine](docs/TrustedPay%20State%20Machine.png)
+![TrustedPay Protocol Message Sequence Diagram](docs/protocol.png)
 
 ## Development
 
