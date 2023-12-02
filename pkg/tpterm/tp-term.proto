@@ -17,4 +17,7 @@ message Transaction {
   string card_exp = 5;    // card expiration as as string
 }
 
-message TransactionSignature { bytes transaction_signature = 1; }
+message TransactionSignature {
+  bytes transaction_digest = 1;
+  bytes transaction_signature = 2;
+}

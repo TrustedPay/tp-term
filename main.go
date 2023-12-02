@@ -20,6 +20,7 @@ func main() {
 	opts := []grpc.ServerOption{}
 
 	t := tpterm.NewTPTerm()
+	defer t.Shutdown()
 
 	grpcServer := grpc.NewServer(opts...)
 	tpterm.RegisterTPTermServer(grpcServer, t)
