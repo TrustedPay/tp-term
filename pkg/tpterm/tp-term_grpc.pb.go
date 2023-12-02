@@ -4,11 +4,10 @@
 // - protoc             v3.15.8
 // source: tp-term.proto
 
-package term
+package tpterm
 
 import (
 	context "context"
-	proto "github.com/TrustedPay/tp-term/proto"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -20,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	TPTerm_PaymentRequest_FullMethodName = "/TPTerm/PaymentRequest"
+	TPTerm_SignRequest_FullMethodName = "/TPTerm/SignRequest"
 )
 
 // TPTermClient is the client API for TPTerm service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TPTermClient interface {
-	PaymentRequest(ctx context.Context, in *proto.Transaction, opts ...grpc.CallOption) (*PaymentRequestReply, error)
+	SignRequest(ctx context.Context, in *Transaction, opts ...grpc.CallOption) (*TransactionSignature, error)
 }
 
 type tPTermClient struct {
@@ -38,9 +37,9 @@ func NewTPTermClient(cc grpc.ClientConnInterface) TPTermClient {
 	return &tPTermClient{cc}
 }
 
-func (c *tPTermClient) PaymentRequest(ctx context.Context, in *proto.Transaction, opts ...grpc.CallOption) (*PaymentRequestReply, error) {
-	out := new(PaymentRequestReply)
-	err := c.cc.Invoke(ctx, TPTerm_PaymentRequest_FullMethodName, in, out, opts...)
+func (c *tPTermClient) SignRequest(ctx context.Context, in *Transaction, opts ...grpc.CallOption) (*TransactionSignature, error) {
+	out := new(TransactionSignature)
+	err := c.cc.Invoke(ctx, TPTerm_SignRequest_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +50,7 @@ func (c *tPTermClient) PaymentRequest(ctx context.Context, in *proto.Transaction
 // All implementations must embed UnimplementedTPTermServer
 // for forward compatibility
 type TPTermServer interface {
-	PaymentRequest(context.Context, *proto.Transaction) (*PaymentRequestReply, error)
+	SignRequest(context.Context, *Transaction) (*TransactionSignature, error)
 	mustEmbedUnimplementedTPTermServer()
 }
 
@@ -59,8 +58,8 @@ type TPTermServer interface {
 type UnimplementedTPTermServer struct {
 }
 
-func (UnimplementedTPTermServer) PaymentRequest(context.Context, *proto.Transaction) (*PaymentRequestReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method PaymentRequest not implemented")
+func (UnimplementedTPTermServer) SignRequest(context.Context, *Transaction) (*TransactionSignature, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SignRequest not implemented")
 }
 func (UnimplementedTPTermServer) mustEmbedUnimplementedTPTermServer() {}
 
@@ -75,20 +74,20 @@ func RegisterTPTermServer(s grpc.ServiceRegistrar, srv TPTermServer) {
 	s.RegisterService(&TPTerm_ServiceDesc, srv)
 }
 
-func _TPTerm_PaymentRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(proto.Transaction)
+func _TPTerm_SignRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Transaction)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TPTermServer).PaymentRequest(ctx, in)
+		return srv.(TPTermServer).SignRequest(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TPTerm_PaymentRequest_FullMethodName,
+		FullMethod: TPTerm_SignRequest_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TPTermServer).PaymentRequest(ctx, req.(*proto.Transaction))
+		return srv.(TPTermServer).SignRequest(ctx, req.(*Transaction))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -101,8 +100,8 @@ var TPTerm_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*TPTermServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "PaymentRequest",
-			Handler:    _TPTerm_PaymentRequest_Handler,
+			MethodName: "SignRequest",
+			Handler:    _TPTerm_SignRequest_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

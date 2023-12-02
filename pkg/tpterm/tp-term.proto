@@ -1,0 +1,20 @@
+syntax = "proto3";
+option go_package = "github.com/TrustedPay/tp-term/pkg/tpterm";
+
+service TPTerm {
+  rpc SignRequest(Transaction) returns (TransactionSignature) {}
+}
+
+message Transaction {
+  int64 nonce = 1;
+
+  bytes transaction_data = 2; // full arbitrary transaction data
+
+  // Metadata
+  int64 amount = 3; // amount in lowest denomination of currency (USD -> cents,
+                    // so $0.01 == 1 and $1.00 == 100)
+  string card_number = 4; // card number as a string
+  string card_exp = 5;    // card expiration as as string
+}
+
+message TransactionSignature { bytes transaction_signature = 1; }

@@ -1,11 +1,9 @@
-package term
+package tpterm
 
 import (
-	context "context"
-	"fmt"
-	sync "sync"
+	"context"
+	"sync"
 
-	proto "github.com/TrustedPay/tp-term/proto"
 	"github.com/sirupsen/logrus"
 )
 
@@ -36,36 +34,17 @@ func NewTPTerm() *TPTerm {
 	}
 }
 
-func (term *TPTerm) PaymentRequest(ctx context.Context, data *proto.Transaction) (*PaymentRequestReply, error) {
+func (term *TPTerm) SignRequest(ctx context.Context, data *Transaction) (*TransactionSignature, error) {
 
 	// Wait to acquire mutex
 	term.lock.Lock()
 	defer term.lock.Unlock()
 
-	// Check if in ready state
-	if term.state != State_READY {
-		return nil, fmt.Errorf("TP Term not in ready state")
-	}
-
-	// Move to UNVERIFIED state
-	term.state = State_UNVERIFIED
-
 	// Sign the transaction
 	sig := []byte("signature here") // TODO: sign the transaction
 	logrus.Printf("generated signature: %x", sig)
 
-	// Move to AWAITING_RESPONSE state
-	term.state = State_AWAITING_RESPONSE
-
-	// Send the transaction to the bank for processing
-	// TODO: send to bank server
-	logrus.Printf("sending to bank for processing")
-
-	// Move back to READY state
-	term.state = State_READY
-
-	return &PaymentRequestReply{
-		Status:    proto.TransactionStatus_OK,
-		PaymentId: "some payment id here",
+	return &TransactionSignature{
+		TransactionSignature: sig,
 	}, nil
 }
